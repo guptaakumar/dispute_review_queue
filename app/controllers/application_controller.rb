@@ -22,7 +22,7 @@ class ApplicationController < ActionController::Base
       redirect_to root_path, alert: "Unauthorized access."
     end
   end
-  
+
   # Helper to enforce admin access for system management features
   def authorize_admin!
     unless current_user.admin?
@@ -33,7 +33,7 @@ class ApplicationController < ActionController::Base
   # Sets the application's time zone based on the signed-in user
   def set_time_zone
     # Use user's time zone or the system default (UTC)
-    time_zone = current_user.try(:time_zone) || 'UTC'
+    time_zone = current_user.try(:time_zone) || "UTC"
     Time.use_zone(time_zone) { yield }
   end
 end

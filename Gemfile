@@ -39,12 +39,12 @@ gem "thruster", require: false
 
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 # gem "image_processing", "~> 1.2"
-gem 'redis'
-gem 'sidekiq' # Required for background workers [cite: 5]
-gem 'bcrypt'  # For authentication (has_secure_password)
-gem 'money-rails' # Recommended for handling amount_cents [cite: 61]
+gem "redis"
+gem "sidekiq" # Required for background workers [cite: 5]
+gem "bcrypt"  # For authentication (has_secure_password)
+gem "money-rails" # Recommended for handling amount_cents [cite: 61]
 # Optional but highly recommended for State Machine:
-gem 'aasm'
+gem "aasm"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
