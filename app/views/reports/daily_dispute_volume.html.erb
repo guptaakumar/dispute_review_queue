@@ -1,0 +1,39 @@
+<h2>Daily Dispute Volume [cite: 56]</h2>
+
+<p><%= link_to "See all disputes", disputes_path %></p>
+
+<%= form_tag reports_daily_volume_path, method: :get, class: 'report-filter' do %>
+  <%= label_tag :from, "From Date" %>
+  <%= date_field_tag :from, params[:from] %>
+  
+  <%= label_tag :to, "To Date" %>
+  <%= date_field_tag :to, params[:to] %>
+  
+  <%= submit_tag "Filter" %>
+<% end %>
+
+<p>
+  All dates are shown in your local time zone: <strong><%= Time.zone.name %></strong>. [cite: 59]
+</p>
+
+<div id="volume-chart">
+  <p>Placeholder for chart visualization. Data is available as JSON at this URL.</p>
+</div>
+<table>
+  <thead>
+    <tr>
+      <th>Date</th>
+      <th>Dispute Count</th>
+      <th>Total Disputed Amount (USD)</th> [cite: 62]
+    </tr>
+  </thead>
+  <tbody>
+    <% @report_data.each do |row| %>
+      <tr>
+        <td><%= row[:date] %></td>
+        <td><%= row[:count] %></td>
+        <td><%= number_to_currency(row[:total_disputed_amount]) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

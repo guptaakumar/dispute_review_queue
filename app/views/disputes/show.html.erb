@@ -1,0 +1,114 @@
+<% dispute = @dispute %>
+<h2>Case Details: <%= dispute.external_id %></h2>
+<p><%= link_to "See all disputes", disputes_path %></p>
+
+<div style="display: flex; gap: 20px;">
+  <div style="flex: 1;">
+    <h3>Case Summary</h3>
+    <ul>
+      <li>**Current Status:** <strong><%= dispute.status.titleize %></strong> [cite: 14]</li>
+      <li>**Disputed Amount:** <%= number_to_currency(dispute.amount_dollars) %></li>
+      <li>**Opened At:** <%= dispute.opened_at.in_time_zone(Time.zone).to_formatted_s(:long) %> [cite: 59]</li>
+      <li>**Charge ID:** <%= dispute.charge.external_id %></li>
+    </ul>
+
+    <% if current_user.reviewer? %>
+      <h3>Triage & Transition [cite: 15]</h3>
+      <%= form_with(model: dispute, local: true) do |form| %>
+        <div>
+          <%= form.label :status_transition, "Action" %>
+          <%= select_tag :status_transition, options_for_select([
+            ['Move to Needs Evidence', 'needs_evidence'],
+            ['Move to Awaiting Decision', 'awaiting_decision'],
+            ['Reopen Case (Requires Justification)', 'reopened']
+          ]), { include_blank: true } %>
+        </div>
+
+        <% if dispute.won? || dispute.lost? %>
+          <div>
+            <%= form.label :justification, "Justification for Reopening" %>
+            <%= form.text_area :justification %>
+          </div>
+        <% end %>
+
+        <%= form.submit "Transition Dispute" %>
+      <% end %>
+
+      <hr>
+
+      <h3>Attach Evidence [cite: 15]</h3>
+      <%= form_with(model: dispute, url: dispute_path(dispute), method: :patch, local: true, html: { multipart: true }) do |form| %>
+        <%= hidden_field_tag :evidence, true %>
+        <div>
+          <%= label_tag :kind, "Evidence Type" %>
+          <%= select_tag :kind, options_for_select([['Text Note', 'note'], ['Local File Reference', 'file']]), required: true %>
+        </div>
+        <div>
+          <%= label_tag :note, "Note/Content" %>
+          <%= text_area_tag :note, nil, placeholder: "Describe the evidence or paste content." %>
+        </div>
+        <div>
+            <%= label_tag :file_path, "File Path/Metadata" %>
+            <%= file_field_tag :file_path %>
+        </div>
+
+        <%= form.submit "Attach Evidence" %>
+      <% end %>
+    <% end %>
+  </div>
+
+  <div style="flex: 1;">
+    <h3>Evidence [cite: 22]</h3>
+    <% if @evidence.any? %>
+      <ul>
+        <% @evidence.each do |e| %>
+          <li><%= e.kind.titleize %> - Added at: <%= e.created_at.in_time_zone(Time.zone).to_formatted_s(:short) %></li>
+          <% if e.metadata['note'].present? %>
+            <blockquote><%= truncate(e.metadata['note'], length: 100) %></blockquote>
+          <% end %>
+          <% if e.metadata['file_path'].present? %>
+            <% file_ref = e.metadata['file_path'] %>
+            <% file_name = file_ref.is_a?(Hash) ? (file_ref['original_filename'] || file_ref['filename'] || file_ref['tempfile'] || file_ref.inspect) : file_ref %>
+            <div>File: <%= file_name %></div>
+            <% if file_name.to_s.match?(/\.(png|jpe?g|gif|webp|bmp)$/i) %>
+              <% raw_path = file_name.to_s %>
+              <% display_path =
+                   if raw_path.match?(%r{\Ahttps?://}) || raw_path.start_with?('/')
+                     raw_path
+                   else
+                     "/uploads/#{raw_path}"
+                   end %>
+              <div style="margin-top: 8px;">
+                <%= image_tag display_path, alt: "Evidence image", style: "max-width: 100%; height: auto; border: 1px solid #ddd; padding: 4px;" %>
+              </div>
+            <% end %>
+          <% end %>
+        <% end %>
+      </ul>
+    <% else %>
+      <p>No evidence attached yet.</p>
+    <% end %>
+
+    <h3>Audit Log (Case Actions) [cite: 23]</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Action</th>
+          <th>Actor</th>
+          <th>Notes</th>
+          <th>When</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @case_actions.each do |action| %>
+          <tr>
+            <td><%= action.action.titleize %></td>
+            <td><%= action.actor.email %></td>
+            <td><%= action.note %></td>
+            <td><%= action.created_at.in_time_zone(Time.zone).to_formatted_s(:short) %></td> [cite: 59]
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -1,0 +1,26 @@
+<h2>Sign In</h2>
+
+<%= form_with(url: sessions_path, local: true) do |form| %>
+  <div>
+    <%= form.label :email %>
+    <%= form.email_field :email, required: true %>
+  </div>
+  
+  <div>
+    <%= form.label :password %>
+    <%= form.password_field :password, required: true %>
+  </div>
+  
+  <div>
+    <%= form.submit "Log In" %>
+  </div>
+<% end %>
+
+<p>
+  Available users (password is 'password' for all):
+  <ul>
+    <li>admin@example.com (Admin [cite: 48])</li>
+    <li>review@example.com (Reviewer [cite: 49])</li>
+    <li>reader@example.com (Read Only [cite: 50])</li>
+  </ul>
+</p>

@@ -1,0 +1,28 @@
+<h2>Time-To-Decision Report [cite: 58]</h2>
+
+<p><%= link_to "See all disputes", disputes_path %></p>
+
+<p>
+  Distribution of the duration from **opened** to final status (**won** or **lost** [cite: 27]), grouped by week. Time calculations are based on your local time zone: <strong><%= Time.zone.name %></strong>. [cite: 59]
+</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Week Starting</th>
+      <th>Total Closed</th>
+      <th>P50 Time-To-Decision (Median)</th>
+      <th>P90 Time-To-Decision</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @report_data.each do |row| %>
+      <tr>
+        <td><%= row[:week] %></td>
+        <td><%= row[:total_count] %></td>
+        <td><%= distance_of_time_in_words(row[:p50_duration_seconds]) %></td>
+        <td><%= distance_of_time_in_words(row[:p90_duration_seconds]) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

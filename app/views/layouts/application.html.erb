@@ -1,0 +1,23 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Dispute Review Queue</title>
+    <%= csrf_meta_tags %>
+    <%= stylesheet_link_tag 'application', media: 'all' %>
+  </head>
+  <body>
+    <header>
+      <h1>Dispute Review System</h1>
+      <% if current_user %>
+        <span>Welcome, <%= current_user.email %> (<%= current_user.role.titleize %>)</span>
+        <%= button_to "Sign Out", sign_out_path, method: :delete %>
+      <% end %>
+    </header>
+    
+    <p style="color: green"><%= flash[:notice] %></p>
+    <p style="color: red"><%= flash[:alert] %></p>
+    
+    <%= yield %>
+  </body>
+</html>
