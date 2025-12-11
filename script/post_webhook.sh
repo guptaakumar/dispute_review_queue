@@ -71,7 +71,7 @@ EOF
 )
 
 echo "Sending webhook to $ENDPOINT with payload:"
-echo "$PAYLOAD" # Use jq for pretty printing
+echo "$PAYLOAD"
 
 # Use curl to send the request
 curl -X POST "$ENDPOINT" \

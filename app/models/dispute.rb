@@ -3,7 +3,7 @@ class Dispute < ApplicationRecord
   has_many :case_actions
   has_many :evidence
 
-  # Assumes USD as the currency (required) [cite: 62]
+  # Assumes USD as the currency (required)
   CURRENCY = "USD"
 
   # Defined states

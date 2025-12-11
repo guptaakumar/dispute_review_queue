@@ -29,17 +29,17 @@ class DisputeProcessorWorker < ApplicationJob
     dispute = Dispute.find_by(external_id: @payload["dispute_external_id"])
 
     case @payload["event_type"]
-    when "dispute.opened" # [cite: 36]
+    when "dispute.opened"
       Dispute.find_or_create_by!(external_id: @payload["dispute_external_id"]) do |d|
         d.charge = charge
         d.status = "open" # Initial state
         d.opened_at = @payload["occurred_at"]
         d.amount_cents = (@payload["amount"].to_f * 100).to_i
         d.currency = @payload["currency"] || "USD"
-        d.external_payload = @payload.to_json # Persist raw payload [cite: 34]
+        d.external_payload = @payload.to_json # Persist raw payload
       end
 
-    when "dispute.updated" # [cite: 37]
+    when "dispute.updated"
       # --- IDEMPOTENCY CHECK 2: Out-of-Order Check ---
       if dispute && Time.zone.parse(@payload["occurred_at"]) > dispute.updated_at
         dispute.update!(
@@ -48,7 +48,7 @@ class DisputeProcessorWorker < ApplicationJob
         )
       end
 
-    when "dispute.closed" # [cite: 38]
+    when "dispute.closed"
       if dispute
         outcome = @payload["outcome"] == "won" ? "won" : "lost"
         # Only transition if the event is newer

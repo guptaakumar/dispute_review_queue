@@ -26,16 +26,16 @@ class User < ApplicationRecord
 
   def set_defaults
     self.role ||= :read_only
-    self.time_zone ||= "UTC" # Sensible default [cite: 59]
+    self.time_zone ||= "UTC" # Sensible default
   end
 
   # RBAC helper methods
   def admin?
-    role == "admin" # [cite: 48]
+    role == "admin"
   end
 
   def reviewer?
-    admin? || role == "reviewer" # [cite: 49]
+    admin? || role == "reviewer"
   end
 
   # read_only? is implicit

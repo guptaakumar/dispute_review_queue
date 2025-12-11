@@ -1,6 +1,6 @@
 # app/controllers/reports_controller.rb
 class ReportsController < ApplicationController
-    before_action :authenticate_user! # All roles can view reports [cite: 50]
+    before_action :authenticate_user! # All roles can view reports
 
     # GET /reports/daily_volume
     def daily_dispute_volume
@@ -11,17 +11,17 @@ class ReportsController < ApplicationController
       # 2. Query data: disputes opened within the range
       @disputes = Dispute.where(opened_at: start_date.utc..end_date.utc)
 
-      # 3. Group and calculate using user's local time (stored in UTC, convert for grouping) [cite: 60]
+      # 3. Group and calculate using user's local time (stored in UTC, convert for grouping)
       @report_data = @disputes.group_by { |d| d.opened_at.in_time_zone(Time.zone).to_date }
                                .map do |date, disputes|
         {
           date: date.to_s,
           count: disputes.count,
-          total_disputed_amount: Dispute.sum_amount_dollars(disputes) # Use helper for money math [cite: 61]
+          total_disputed_amount: Dispute.sum_amount_dollars(disputes) # Use helper for money math
         }
       end
 
-      # Support JSON response for chart-friendly data [cite: 56]
+      # Support JSON response for chart-friendly data
       respond_to do |format|
         format.html # Render HTML table/chart view
         format.json { render json: @report_data }
@@ -33,7 +33,7 @@ class ReportsController < ApplicationController
       # 1. Get closed disputes
       closed_disputes = Dispute.where(status: [ "won", "lost" ]).where.not(closed_at: nil)
 
-      # 2. Calculate duration and group by week [cite: 58]
+      # 2. Calculate duration and group by week
       weekly_durations = closed_disputes.group_by do |d|
         # Group by the Monday of the week (using user's time zone for week boundary)
         d.closed_at.in_time_zone(Time.zone).beginning_of_week(:sunday).to_date

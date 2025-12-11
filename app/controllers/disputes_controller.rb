@@ -2,7 +2,7 @@
 require "fileutils"
 
 class DisputesController < ApplicationController
-  # Gate access: Reviewer and Admin can triage [cite: 1, 49]
+  # Gate access: Reviewer and Admin can triage
   before_action :authorize_reviewer!, only: [ :update ]
 
   def index

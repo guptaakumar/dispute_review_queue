@@ -1,7 +1,7 @@
 # app/controllers/application_controller.rb
 class ApplicationController < ActionController::Base
   helper_method :current_user
-  before_action :authenticate_user! # All features require sign-in [cite: 46]
+  before_action :authenticate_user! # All features require sign-in
   around_action :set_time_zone
 
   private

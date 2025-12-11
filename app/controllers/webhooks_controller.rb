@@ -32,7 +32,7 @@ class WebhooksController < ApplicationController
     end
 
     def valid_dispute_payload?(payload)
-      # Check for core required fields [cite: 32]
+      # Check for core required fields
       payload.is_a?(Hash) &&
       payload["charge_external_id"].present? &&
       payload["dispute_external_id"].present? &&

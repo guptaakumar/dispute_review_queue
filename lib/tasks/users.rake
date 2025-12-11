@@ -12,7 +12,7 @@ namespace :users do
         User.find_or_create_by!(email: email) do |u|
           u.password = password # Sourced from Rails credentials
           u.role = role
-          u.time_zone = "America/New_York" # Example time zone [cite: 59]
+          u.time_zone = "America/New_York" # Example time zone
           puts "  Created/Found user: #{email} (#{role})"
         end
       end

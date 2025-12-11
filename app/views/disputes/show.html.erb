@@ -6,14 +6,14 @@
   <div style="flex: 1;">
     <h3>Case Summary</h3>
     <ul>
-      <li>**Current Status:** <strong><%= dispute.status.titleize %></strong> [cite: 14]</li>
+      <li>**Current Status:** <strong><%= dispute.status.titleize %></strong></li>
       <li>**Disputed Amount:** <%= number_to_currency(dispute.amount_dollars) %></li>
-      <li>**Opened At:** <%= dispute.opened_at.in_time_zone(Time.zone).to_formatted_s(:long) %> [cite: 59]</li>
+      <li>**Opened At:** <%= dispute.opened_at.in_time_zone(Time.zone).to_formatted_s(:long) %></li>
       <li>**Charge ID:** <%= dispute.charge.external_id %></li>
     </ul>
 
     <% if current_user.reviewer? %>
-      <h3>Triage & Transition [cite: 15]</h3>
+      <h3>Triage & Transition</h3>
       <%= form_with(model: dispute, local: true) do |form| %>
         <div>
           <%= form.label :status_transition, "Action" %>
@@ -36,7 +36,7 @@
 
       <hr>
 
-      <h3>Attach Evidence [cite: 15]</h3>
+      <h3>Attach Evidence</h3>
       <%= form_with(model: dispute, url: dispute_path(dispute), method: :patch, local: true, html: { multipart: true }) do |form| %>
         <%= hidden_field_tag :evidence, true %>
         <div>
@@ -58,7 +58,7 @@
   </div>
 
   <div style="flex: 1;">
-    <h3>Evidence [cite: 22]</h3>
+    <h3>Evidence</h3>
     <% if @evidence.any? %>
       <ul>
         <% @evidence.each do |e| %>
@@ -89,7 +89,7 @@
       <p>No evidence attached yet.</p>
     <% end %>
 
-    <h3>Audit Log (Case Actions) [cite: 23]</h3>
+    <h3>Audit Log (Case Actions)</h3>
     <table>
       <thead>
         <tr>
@@ -105,7 +105,7 @@
             <td><%= action.action.titleize %></td>
             <td><%= action.actor.email %></td>
             <td><%= action.note %></td>
-            <td><%= action.created_at.in_time_zone(Time.zone).to_formatted_s(:short) %></td> [cite: 59]
+            <td><%= action.created_at.in_time_zone(Time.zone).to_formatted_s(:short) %></td>
           </tr>
         <% end %>
       </tbody>

@@ -9,7 +9,7 @@ class CreateDisputes < ActiveRecord::Migration[8.0]
       t.integer :amount_cents
       t.string :currency
       t.jsonb :external_payload
-      t.index :external_id, unique: true # Enforce uniqueness [cite: 66]
+      t.index :external_id, unique: true # Enforce uniqueness
       t.timestamps
     end
   end
