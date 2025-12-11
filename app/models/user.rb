@@ -3,7 +3,7 @@ class User < ApplicationRecord
   has_secure_password
   has_many :case_actions, foreign_key: :actor_id
 
-  enum :role, { read_only: 'read_only', reviewer: 'reviewer', admin: 'admin' }
+  enum :role, { read_only: "read_only", reviewer: "reviewer", admin: "admin" }
 
   # Default values
   after_initialize :set_defaults
