@@ -8,8 +8,9 @@ namespace :users do
         reviewer: "review@example.com",
         read_only: "reader@example.com"
       }.each do |role, email|
+        password = User.default_password_for(role)
         User.find_or_create_by!(email: email) do |u|
-          u.password = "password" # Simple, predictable password for local dev
+          u.password = password # Sourced from Rails credentials
           u.role = role
           u.time_zone = "America/New_York" # Example time zone [cite: 59]
           puts "  Created/Found user: #{email} (#{role})"

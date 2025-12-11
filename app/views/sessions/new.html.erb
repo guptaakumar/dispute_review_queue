@@ -16,11 +16,15 @@
   </div>
 <% end %>
 
+<% admin_password    = User.default_password_for(:admin) %>
+<% reviewer_password = User.default_password_for(:reviewer) %>
+<% reader_password   = User.default_password_for(:read_only) %>
+
 <p>
-  Available users (password is 'password' for all):
+  Available users (passwords from Rails credentials):
   <ul>
-    <li>admin@example.com (Admin [cite: 48])</li>
-    <li>review@example.com (Reviewer [cite: 49])</li>
-    <li>reader@example.com (Read Only [cite: 50])</li>
+    <li>admin@example.com (Admin [cite: 48]) — Password: <code><%= admin_password %></code></li>
+    <li>review@example.com (Reviewer [cite: 49]) — Password: <code><%= reviewer_password %></code></li>
+    <li>reader@example.com (Read Only [cite: 50]) — Password: <code><%= reader_password %></code></li>
   </ul>
 </p>
